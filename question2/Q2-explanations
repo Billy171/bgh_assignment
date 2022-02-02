@@ -1,0 +1,57 @@
+Q2)
+
+A)
+-Plotting the single day returns provided showed us that for the most part they are normally distributed with the
+exception of high return outliers.
+
+-Dealing with missing values here is more complicated than in Q1 as many of the fields have lots of missing values.
+In fact, no row in the dataset of 18411 observations has all completed entries. Some data imputation is necessary here.
+I have gone for a simple imputation with the median.
+
+-For backtesting and future proofing reasons I have removed the first and last 2000 lines of the dataset. This is roughly
+28 days.
+
+-
+
+-I viewed this problem as a regression problem rater than a classification problem. Due to the High dimensionality
+of the dataset I decided to try both ridge regression and random forest. With more time I would have included
+LASSO and logistic regression in the mix as well as a basic FFN.
+
+-To optimise the models I performed a grid search with 5-fold cross validation. The best model was then trained
+on the full training set.
+
+-Again a 5-fold cross validation was used in order to evaluate the performance of the chosen random forest model.
+
+-The output of the final model on the test data seemed normally distributed when plotted.
+
+B)
+-Based on the model's predicted day return and a tolerance parameter in the trading strategy I was able to classify
+each prediction as a 'BUY', 'SELL' or 'DO NOTHING'. Then for each of the suggested 'BUY' coins I would weigh them
+relative to the predicted return and use that weighting on the portfolio. A number of weighting options were considered
+as well as an array of tolerance values.
+
+-The final trading strategy proposed classifies 'DO NOTHING' as a predicted return of absolute value under 0.2. This was
+crudely chosen by simply looking at the P&L curves of unseen past and future data. This chosen trading strategy used the
+ 'uniform' weighting system. (though I'm sure with more analysis a properly weighted portfolio would be better).
+
+C)
+-My backtesting system invests all the portfolio and calculates the value after the day's returns
+
+D)
+-Sharpe Ratio = 6.82 and 14.28 for past and future data respectively
+-These seem pretty high since the returns are pretty unstable. I think I may have miscalculated these but there are
+quite a few definitions online. (this is my first 'trading' experience).
+
+E)
+-One method that could be employed in order to directly improve trading performance would be to use some sort of Neural
+Network architecture that penalizes real portfolio wide returns and their variability. A model of this architecture
+could also use a learnable FFN to assign the portfolio instead of predicting 'BUY', 'SELL' or 'DO NOTHING'.
+-The advantage of optimising directly for the Sharpe ratio is that, if successful, the learned training strategy will be
+well risk adjusted. The negative of optimising directly for the Sharpe ratio is that a more complicated model is needed
+as this is a harder problem than regression on the returns.
+
+F)
+-One strategy level hyper-parameter is the 'do nothing tolerance', as I previously mentioned, this could be learned with
+a FFN.
+-Another hyper-parameter that could be considered is the portion of the portfolio that should be invested on any given
+day. Making this proportional to the CVI (Crypto Volatility Index) may be a good idea.
